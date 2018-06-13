@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Scales</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+    <script>
+        // create variable for svg width, height and spacing.
+        var svgWidth = 500;
+        var svgHeight = 300;
+        var spacing = 2;
+
+        // Create array
+        var myData = [ 10, 15, 20, 30, 45, 50, 40, 45, 50, 40, 45, 36, 78, 90, 43, 25, 45, 89, 500, 30, 50, 25, 60 ];
+        
+        // Create a scale for the height of the chart
+        var heightScale = d3.scale.linear()
+                            // add max method so that it takes the maximum value of the array.
+                            .domain([0, d3.max(myData)])
+                            .range([0, 0.9*svgHeight]);
+        
+        // apply values to svg
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width",svgWidth)
+                    .attr("height",svgHeight)
+                    .attr("style", "background-color:#ddd"); /*added some style*/
+        
+        svg.selectAll("rect")
+        /* Don't forget that the below happens in order which is 
+        why some effects may not work if in incorrect order. */
+            .data(myData)
+            .enter()
+            .append("rect")
+            .attr("fill", "#30C5C7")
+            .attr("x", function(d,i){return i * (svgWidth / myData.length);}) /* multiply the index by the width --keeps scale */
+            .attr("y", function(d){return svgHeight - (heightScale(d));}) /* flip the chart */
+            .attr("width", svgWidth / myData.length - spacing) /* keeps scale */
+            .attr("height", function(d){return(heightScale(d));});
+    </script>
+
+</body>
+</html>
